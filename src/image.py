@@ -47,7 +47,15 @@ class Image:
     #   on retourne une nouvelle image binarisee
     #==============================================================================
     def binarisation(self, S):
-        pass
+        im_bin=Image()
+        im_bin.set_pixels(np.zeros((self.H, self.W),dtype=np.uint8))
+        for l in range (0, self.H):
+            for c in range (0, self.W):
+                if self.pixels[l][c]>=S:
+                    im_bin.pixels[l][c]=255
+                else:
+                    im_bin.pixels[l][c] =0 
+        return im_bin
 
 
     #==============================================================================
@@ -59,18 +67,47 @@ class Image:
     #   on retourne une nouvelle image recadree
     #==============================================================================
     def localisation(self):
-        pass
-
+       c_min = self.W-1
+       c_max = 0
+       l_min = self.H-1
+       l_max = 0
+       im_bin2=Image()
+       for l in range (0, self.H):
+           for c in range (0, self.W):
+               if self.pixels[l, c]==0:
+                   if c > c_max:
+                       c_max = c
+                   if c_min > c:
+                       c_min = c
+                   if l_min > l:
+                       l_min = l
+                   if l > l_max:
+                       l_max = l
+                
+       im_bin2.set_pixels(self.pixels[l_min:l_max,c_min:c_max])
+       return im_bin2
     #==============================================================================
     # Methode de redimensionnement d'image
     #==============================================================================
     def resize(self, new_H, new_W):
-        pass
-
-
+        im_bin3=Image()
+        Tablo = resize(self.pixels, (new_H,new_W), 0)
+        Tablo = np.uint8(Tablo*255)
+        im_bin3.set_pixels(Tablo)
+        return im_bin3
     #==============================================================================
     # Methode de mesure de similitude entre l'image self et un modele im
     #==============================================================================
     def similitude(self, im):
-        pass
+        result=0
+        for l in range (0,self.H):
+            for c in range (0, self.W):
+                if self.pixels[l, c]==im.pixels[l, c]:
+                    result= result + 1
+                else :
+                    result
+        return result/(self.H*self.W)
+                
+                
+        
 
